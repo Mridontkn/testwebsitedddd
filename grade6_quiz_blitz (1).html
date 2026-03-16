@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 Quiz Blitz</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f0ede6;
+    --text: #1a1a18;
+    --text2: #6b6860;
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-light: #EAF3DE;
+    --green-text: #27500A;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --red-text: #501313;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --amber-text: #633806;
+    --blue-light: #E6F1FB;
+    --blue-text: #0C447C;
+    --purple-light: #EEEDFE;
+    --purple-text: #3C3489;
+    --border: rgba(0,0,0,0.1);
+    --border2: rgba(0,0,0,0.18);
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #18181a;
+      --surface: #242426;
+      --surface2: #2e2e30;
+      --text: #f0ede6;
+      --text2: #9a9890;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.18);
+      --green-light: #173404;
+      --green-text: #C0DD97;
+      --red-light: #501313;
+      --red-text: #F09595;
+      --amber-light: #412402;
+      --amber-text: #FAC775;
+      --blue-light: #042C53;
+      --blue-text: #B5D4F4;
+      --purple-light: #26215C;
+      --purple-text: #CECBF6;
+    }
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  #app {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .header { text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem; }
+  .header h1 { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .header p { font-size: 14px; color: var(--text2); margin-top: 5px; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+  .stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+  .stat-val { font-size: 22px; font-weight: 700; color: var(--text); }
+  .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .progress-bar { height: 6px; background: var(--surface2); border-radius: 99px; margin-bottom: 0.75rem; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; background: var(--green); transition: width 0.4s ease; }
+  .timer-bar { height: 4px; border-radius: 99px; margin-bottom: 1rem; transition: width 0.9s linear, background 0.3s; }
+
+  .category-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cat-math { background: var(--blue-light); color: var(--blue-text); }
+  .cat-reading { background: var(--purple-light); color: var(--purple-text); }
+  .cat-writing { background: var(--amber-light); color: var(--amber-text); }
+  .cat-science { background: var(--green-light); color: var(--green-text); }
+  .cat-fun { background: var(--amber-light); color: var(--amber-text); }
+
+  .question-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .question-text { font-size: 16px; color: var(--text); line-height: 1.65; margin-bottom: 1rem; font-weight: 500; }
+
+  .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .opt-btn {
+    background: var(--surface2);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    line-height: 1.4;
+    font-family: inherit;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--border2); background: var(--surface); transform: translateY(-1px); }
+  .opt-btn:active:not(:disabled) { transform: scale(0.98); }
+  .opt-btn.correct { background: var(--green-light); border-color: var(--green); color: var(--green-text); font-weight: 600; }
+  .opt-btn.wrong { background: var(--red-light); border-color: var(--red); color: var(--red-text); }
+  .opt-btn:disabled { cursor: default; }
+
+  .feedback-box { border-radius: var(--radius); padding: 12px 14px; font-size: 14px; margin-bottom: 1rem; line-height: 1.55; }
+  .feedback-correct { background: var(--green-light); color: var(--green-text); }
+  .feedback-wrong { background: var(--red-light); color: var(--red-text); }
+
+  .next-btn {
+    width: 100%; padding: 13px;
+    border-radius: var(--radius);
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .next-btn:hover { background: var(--surface2); }
+
+  .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.5rem 0; }
+  .mode-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .mode-card:hover { transform: translateY(-2px); }
+  .mode-card.selected { border: 2px solid var(--green); }
+  .mode-icon { font-size: 26px; margin-bottom: 6px; }
+  .mode-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .mode-desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
+
+  .start-btn {
+    width: 100%; padding: 14px;
+    border-radius: var(--radius);
+    background: var(--green);
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: -0.2px;
+  }
+  .start-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .start-btn:active { transform: scale(0.99); }
+
+  .result-icon { font-size: 56px; text-align: center; margin: 1rem 0 0.5rem; }
+  .result-title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; color: var(--text); letter-spacing: -0.5px; }
+  .result-sub { font-size: 14px; text-align: center; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.5; }
+  .replay-btn {
+    width: 100%; padding: 13px;
+    border-radius: var(--radius);
+    background: transparent;
+    border: 0.5px solid var(--border2);
+    color: var(--text);
+    font-size: 15px;
+    cursor: pointer;
+    margin-bottom: 8px;
+    font-family: inherit;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  .replay-btn:hover { background: var(--surface2); }
+
+  .logo { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
+  .logo-badge { background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- START SCREEN -->
+  <div id="screen-start" class="screen active">
+    <div class="logo">
+      <span class="logo-badge">GRADE 6</span>
+      <span style="font-size:13px; color:var(--text2); font-weight:500;">Ontario EQAO Practice</span>
+    </div>
+    <div class="header">
+      <h1>Quiz Blitz 🎯</h1>
+      <p>EQAO-style questions + fun trivia — earn points, build streaks!</p>
+    </div>
+    <div class="start-grid">
+      <div class="mode-card selected" onclick="selectMode(this,'eqao')">
+        <div class="mode-icon">📐</div>
+        <div class="mode-title">EQAO Mix</div>
+        <div class="mode-desc">Math, reading & writing</div>
+      </div>
+      <div class="mode-card" onclick="selectMode(this,'fun')">
+        <div class="mode-icon">🌟</div>
+        <div class="mode-title">Fun Facts</div>
+        <div class="mode-desc">Science, animals & more</div>
+      </div>
+      <div class="mode-card" onclick="selectMode(this,'math')">
+        <div class="mode-icon">🔢</div>
+        <div class="mode-title">Math Only</div>
+        <div class="mode-desc">Numbers & problem solving</div>
+      </div>
+      <div class="mode-card" onclick="selectMode(this,'all')">
+        <div class="mode-icon">🎯</div>
+        <div class="mode-title">Everything!</div>
+        <div class="mode-desc">All categories mixed</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startGame()">Start Quiz →</button>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="screen">
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-val" id="score-val">0</div><div class="stat-lbl">Score</div></div>
+      <div class="stat-card"><div class="stat-val" id="qnum-val">1/10</div><div class="stat-lbl">Question</div></div>
+      <div class="stat-card"><div class="stat-val" id="streak-val">0🔥</div><div class="stat-lbl">Streak</div></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="timer-bar" id="timer-bar" style="width:100%; background:var(--green);"></div>
+    <div class="question-card">
+      <span class="category-badge" id="cat-badge">Math</span>
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options-grid"></div>
+    </div>
+    <div class="feedback-box" id="feedback-box" style="display:none"></div>
+    <button class="next-btn" id="next-btn" style="display:none" onclick="nextQuestion()">Next question →</button>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="screen-result" class="screen">
+    <div class="result-icon" id="result-icon">🏆</div>
+    <div class="result-title" id="result-title">Excellent!</div>
+    <div class="result-sub" id="result-sub"></div>
+    <div class="stats-row" style="margin-bottom:1.5rem;">
+      <div class="stat-card"><div class="stat-val" id="r-score">0</div><div class="stat-lbl">Score</div></div>
+      <div class="stat-card"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">Correct</div></div>
+      <div class="stat-card"><div class="stat-val" id="r-streak">0</div><div class="stat-lbl">Best streak</div></div>
+    </div>
+    <button class="replay-btn" onclick="restartSame()">Play again ↺</button>
+    <button class="replay-btn" onclick="goHome()">Choose mode ←</button>
+  </div>
+
+</div>
+
+<script>
+const ALL_QUESTIONS = [
+  { cat:'math', catLabel:'Math', q:'A store sells apples for $0.35 each. If Maya buys 12 apples, how much does she pay?', opts:['$3.80','$4.20','$3.50','$4.00'], ans:1, exp:'12 × $0.35 = $4.20' },
+  { cat:'math', catLabel:'Math', q:'What is the perimeter of a rectangle with length 8 cm and width 5 cm?', opts:['40 cm','26 cm','13 cm','20 cm'], ans:1, exp:'Perimeter = 2 × (8 + 5) = 2 × 13 = 26 cm' },
+  { cat:'math', catLabel:'Math', q:'Which fraction is equivalent to 3/4?', opts:['6/9','9/12','4/6','8/14'], ans:1, exp:'9/12 = 3/4 because 9÷3 = 3 and 12÷3 = 4' },
+  { cat:'math', catLabel:'Math', q:'A bag has 6 red, 4 blue, and 2 green marbles. What is the probability of picking a red marble?', opts:['1/2','1/3','3/6','1/4'], ans:0, exp:'6 out of 12 total = 6/12 = 1/2' },
+  { cat:'math', catLabel:'Math', q:'What is 25% of 80?', opts:['25','20','15','30'], ans:1, exp:'25% = 1/4, and 80 ÷ 4 = 20' },
+  { cat:'math', catLabel:'Math', q:'A pattern goes: 3, 6, 12, 24, ... What is the next number?', opts:['36','42','48','28'], ans:2, exp:'Each number is multiplied by 2. 24 × 2 = 48' },
+  { cat:'math', catLabel:'Math', q:'What is the area of a triangle with base 10 cm and height 6 cm?', opts:['60 cm²','30 cm²','16 cm²','20 cm²'], ans:1, exp:'Area = (base × height) ÷ 2 = (10 × 6) ÷ 2 = 30 cm²' },
+  { cat:'math', catLabel:'Math', q:'Which number is between 3.4 and 3.5?', opts:['3.52','3.38','3.47','3.60'], ans:2, exp:'3.47 falls between 3.40 and 3.50' },
+  { cat:'math', catLabel:'Math', q:'Liam has $20. He buys a book for $7.45 and a snack for $2.30. How much does he have left?', opts:['$9.75','$10.25','$11.25','$10.75'], ans:1, exp:'$20.00 − $7.45 − $2.30 = $10.25' },
+  { cat:'math', catLabel:'Math', q:'What is 2³ (2 to the power of 3)?', opts:['6','8','9','12'], ans:1, exp:'2³ = 2 × 2 × 2 = 8' },
+  { cat:'reading', catLabel:'Reading', q:'In a story, the narrator says "the thunder growled like an angry giant." This is an example of:', opts:['A simile','A metaphor','Personification','Alliteration'], ans:2, exp:'Giving thunder a human-like action (growling angrily) is personification.' },
+  { cat:'reading', catLabel:'Reading', q:'Which sentence is the BEST main idea for a paragraph about recycling?', opts:['Blue bins are placed on the curb.','Recycling helps protect the environment.','Paper and plastic can both be recycled.','Our school started a recycling club.'], ans:1, exp:'A main idea should cover the whole topic broadly — recycling helping the environment fits best.' },
+  { cat:'reading', catLabel:'Reading', q:'The word "benevolent" most likely means:', opts:['angry','powerful','kind and generous','careful'], ans:2, exp:'"Benevolent" comes from Latin meaning "good will" — it means kind and generous.' },
+  { cat:'reading', catLabel:'Reading', q:'Which text feature would BEST help a reader find information about photosynthesis in a science textbook?', opts:['Table of contents','Glossary','Index','Caption'], ans:2, exp:'An index helps you find specific topics quickly by page number.' },
+  { cat:'reading', catLabel:'Reading', q:'A story\'s "climax" is:', opts:['The introduction of characters','The most exciting turning point','The lesson learned','The setting of the story'], ans:1, exp:'The climax is the highest point of tension or the turning point in a story.' },
+  { cat:'writing', catLabel:'Writing', q:'Which sentence uses correct punctuation?', opts:["Let's go to the park, it's sunny outside.","Let's go to the park. It's sunny outside.","Lets go to the park its sunny outside.","Let's go to the park it's sunny outside."], ans:1, exp:'Two complete sentences need a period between them, not a comma (comma splice).' },
+  { cat:'writing', catLabel:'Writing', q:'Which transition word BEST shows a contrast between two ideas?', opts:['Furthermore','Therefore','However','Additionally'], ans:2, exp:'"However" is used to introduce a contrasting or opposing idea.' },
+  { cat:'writing', catLabel:'Writing', q:'Which is an example of a topic sentence?', opts:['"He walked quickly."','"Dogs make great pets for many reasons."','"For example, dogs are loyal."','"In conclusion, dogs are wonderful."'], ans:1, exp:'A topic sentence introduces the main idea of a paragraph.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'Which planet is known as the Red Planet?', opts:['Venus','Mars','Jupiter','Saturn'], ans:1, exp:'Mars gets its reddish colour from iron oxide (rust) on its surface.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'How many bones does an adult human body have?', opts:['206','198','250','215'], ans:0, exp:'Adults have 206 bones. Babies are born with around 270 and some fuse together as we grow.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'What gas do plants absorb from the air during photosynthesis?', opts:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'], ans:2, exp:'Plants take in CO₂ and release oxygen during photosynthesis.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'Which animal has the largest brain compared to its body size?', opts:['Dolphin','Elephant','Humans','Chimpanzee'], ans:0, exp:'Dolphins have the largest brain-to-body ratio of any animal besides humans.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'What is the capital city of Canada?', opts:['Toronto','Vancouver','Ottawa','Montreal'], ans:2, exp:'Ottawa, in Ontario, has been Canada\'s capital since 1857.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'The Great Wall of China was built to protect against invasions. Approximately how long is it?', opts:['1,000 km','5,000 km','21,000 km','500 km'], ans:2, exp:'The Great Wall stretches over 21,000 km when all sections are counted!' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'Which layer of the Earth is the thickest?', opts:['Crust','Mantle','Outer core','Inner core'], ans:1, exp:'The mantle is about 2,900 km thick — by far the thickest layer of Earth.' },
+  { cat:'fun', catLabel:'Fun Fact!', q:'What is the fastest land animal?', opts:['Lion','Ostrich','Cheetah','Greyhound'], ans:2, exp:'Cheetahs can reach up to 120 km/h in short bursts.' },
+];
+
+let selectedMode = 'eqao';
+let questions = [];
+let current = 0, score = 0, streak = 0, bestStreak = 0, correct = 0;
+let timerInterval = null, timeLeft = 20, answered = false;
+
+function selectMode(el, mode) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMode = mode;
+}
+
+function shuffle(arr) {
+  let a = [...arr];
+  for (let i = a.length-1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function getQuestions(mode) {
+  let pool = [];
+  if (mode === 'eqao') pool = ALL_QUESTIONS.filter(q => ['math','reading','writing'].includes(q.cat));
+  else if (mode === 'fun') pool = ALL_QUESTIONS.filter(q => q.cat === 'fun');
+  else if (mode === 'math') pool = ALL_QUESTIONS.filter(q => q.cat === 'math');
+  else pool = ALL_QUESTIONS;
+  return shuffle(pool).slice(0, 10);
+}
+
+function startGame() {
+  questions = getQuestions(selectedMode);
+  current = 0; score = 0; streak = 0; bestStreak = 0; correct = 0;
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+}
+
+function renderQuestion() {
+  answered = false;
+  clearInterval(timerInterval);
+  timeLeft = 20;
+  const q = questions[current];
+  const total = questions.length;
+  document.getElementById('qnum-val').textContent = (current+1) + '/' + total;
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('streak-val').textContent = streak + '🔥';
+  document.getElementById('progress-fill').style.width = (current / total * 100) + '%';
+
+  const badge = document.getElementById('cat-badge');
+  badge.textContent = q.catLabel;
+  badge.className = 'category-badge cat-' + q.cat;
+  document.getElementById('question-text').textContent = q.q;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = opt;
+    btn.onclick = () => handleAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedback-box').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+
+  const tb = document.getElementById('timer-bar');
+  tb.style.transition = 'none';
+  tb.style.width = '100%';
+  tb.style.background = 'var(--green)';
+  setTimeout(() => { tb.style.transition = 'width 0.9s linear, background 0.3s'; }, 50);
+
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const pct = (timeLeft / 20 * 100);
+    tb.style.width = pct + '%';
+    if (timeLeft <= 5) tb.style.background = 'var(--red)';
+    else if (timeLeft <= 10) tb.style.background = 'var(--amber)';
+    else tb.style.background = 'var(--green)';
+    if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) handleAnswer(-1); }
+  }, 1000);
+}
+
+function handleAnswer(chosen) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  const q = questions[current];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('feedback-box');
+
+  if (chosen === q.ans) {
+    btns[chosen].classList.add('correct');
+    streak++; correct++;
+    bestStreak = Math.max(bestStreak, streak);
+    const pts = Math.max(100, 100 + (timeLeft * 10) + (streak > 1 ? (streak-1)*50 : 0));
+    score += pts;
+    fb.className = 'feedback-box feedback-correct';
+    fb.textContent = '✓ Correct! +' + pts + ' pts — ' + q.exp;
+  } else {
+    if (chosen >= 0) btns[chosen].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    streak = 0;
+    fb.className = 'feedback-box feedback-wrong';
+    fb.textContent = (chosen === -1 ? '⏱ Time\'s up! ' : '✗ Not quite. ') + q.exp;
+  }
+
+  fb.style.display = 'block';
+  document.getElementById('score-val').textContent = score;
+  document.getElementById('streak-val').textContent = streak + '🔥';
+  document.getElementById('next-btn').style.display = 'block';
+  document.getElementById('next-btn').textContent = (current + 1 < questions.length) ? 'Next question →' : 'See results →';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) renderQuestion();
+  else showResults();
+}
+
+function showResults() {
+  document.getElementById('progress-fill').style.width = '100%';
+  const pct = Math.round(correct / questions.length * 100);
+  let icon = '🏆', title = 'Outstanding!', sub = 'You\'re an EQAO superstar!';
+  if (pct < 40) { icon = '📚'; title = 'Keep practising!'; sub = 'Review the questions and try again.'; }
+  else if (pct < 60) { icon = '🙂'; title = 'Good effort!'; sub = 'A bit more study and you\'ll ace it!'; }
+  else if (pct < 80) { icon = '👍'; title = 'Well done!'; sub = 'Solid work — keep it up!'; }
+  document.getElementById('result-icon').textContent = icon;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = pct + '% correct — ' + sub;
+  document.getElementById('r-score').textContent = score;
+  document.getElementById('r-correct').textContent = correct + '/' + questions.length;
+  document.getElementById('r-streak').textContent = bestStreak;
+  showScreen('result');
+}
+
+function restartSame() { startGame(); }
+function goHome() { showScreen('start'); }
+</script>
+</body>
+</html>
