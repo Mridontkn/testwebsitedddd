@@ -8,235 +8,208 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0ede6;
-    --text: #1a1a18;
-    --text2: #6b6860;
-    --green: #1D9E75;
-    --green-dark: #0F6E56;
-    --green-light: #EAF3DE;
-    --green-text: #27500A;
-    --red: #E24B4A;
-    --red-light: #FCEBEB;
-    --red-text: #501313;
-    --amber: #EF9F27;
-    --amber-light: #FAEEDA;
-    --amber-text: #633806;
-    --blue-light: #E6F1FB;
-    --blue-text: #0C447C;
-    --purple-light: #EEEDFE;
-    --purple-text: #3C3489;
-    --border: rgba(0,0,0,0.1);
-    --border2: rgba(0,0,0,0.18);
-    --radius: 10px;
-    --radius-lg: 14px;
+    --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0ede6;
+    --text: #1a1a18; --text2: #6b6860;
+    --green: #1D9E75; --green-dark: #0F6E56; --green-light: #EAF3DE; --green-text: #27500A;
+    --red: #E24B4A; --red-light: #FCEBEB; --red-text: #501313;
+    --amber: #EF9F27; --amber-light: #FAEEDA; --amber-text: #633806;
+    --blue-light: #E6F1FB; --blue-text: #0C447C;
+    --purple-light: #EEEDFE; --purple-text: #3C3489;
+    --hard: #A32D2D; --hard-light: #FCEBEB; --hard-text: #501313;
+    --border: rgba(0,0,0,0.1); --border2: rgba(0,0,0,0.18);
+    --radius: 10px; --radius-lg: 14px;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #18181a;
-      --surface: #242426;
-      --surface2: #2e2e30;
-      --text: #f0ede6;
-      --text2: #9a9890;
-      --border: rgba(255,255,255,0.1);
-      --border2: rgba(255,255,255,0.18);
-      --green-light: #173404;
-      --green-text: #C0DD97;
-      --red-light: #501313;
-      --red-text: #F09595;
-      --amber-light: #412402;
-      --amber-text: #FAC775;
-      --blue-light: #042C53;
-      --blue-text: #B5D4F4;
-      --purple-light: #26215C;
-      --purple-text: #CECBF6;
+      --bg: #18181a; --surface: #242426; --surface2: #2e2e30;
+      --text: #f0ede6; --text2: #9a9890;
+      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.18);
+      --green-light: #173404; --green-text: #C0DD97;
+      --red-light: #501313; --red-text: #F09595;
+      --amber-light: #412402; --amber-text: #FAC775;
+      --blue-light: #042C53; --blue-text: #B5D4F4;
+      --purple-light: #26215C; --purple-text: #CECBF6;
+      --hard: #E24B4A; --hard-light: #501313; --hard-text: #F09595;
     }
   }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-
-  #app {
-    width: 100%;
-    max-width: 520px;
-  }
-
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+  #app { width: 100%; max-width: 540px; }
   .screen { display: none; }
   .screen.active { display: block; }
 
-  .header { text-align: center; margin-bottom: 1.5rem; padding-top: 0.5rem; }
+  .logo { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.25rem; }
+  .logo-badge { background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
+  .header { text-align: center; margin-bottom: 1.25rem; }
   .header h1 { font-size: 26px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
   .header p { font-size: 14px; color: var(--text2); margin-top: 5px; }
+
+  .diff-tabs { display: flex; gap: 6px; background: var(--surface2); border-radius: var(--radius); padding: 4px; margin-bottom: 1rem; }
+  .diff-tab { flex: 1; padding: 9px; border: none; background: transparent; border-radius: 7px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; color: var(--text2); transition: background 0.15s, color 0.15s; }
+  .diff-tab.active { background: var(--surface); color: var(--text); }
+  .diff-tab.hard-tab.active { background: var(--hard); color: #fff; }
+
+  .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+  .mode-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; cursor: pointer; text-align: center; transition: border-color 0.15s, transform 0.12s; position: relative; }
+  .mode-card:hover { transform: translateY(-2px); }
+  .mode-card.selected { border: 2px solid var(--green); }
+  .mode-card.hard-card.selected { border: 2px solid var(--hard); }
+  .mode-icon { font-size: 26px; margin-bottom: 6px; }
+  .mode-title { font-size: 14px; font-weight: 600; color: var(--text); }
+  .mode-desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .hard-pip { position: absolute; top: 8px; right: 8px; background: var(--hard); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 99px; letter-spacing: 0.4px; }
+
+  .hard-info { background: var(--hard-light); border-radius: var(--radius); padding: 10px 14px; margin-bottom: 1rem; font-size: 13px; color: var(--hard-text); line-height: 1.5; }
+
+  .start-btn { width: 100%; padding: 14px; border-radius: var(--radius); background: var(--green); border: none; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background 0.15s, transform 0.1s; }
+  .start-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .start-btn.hard-start { background: var(--hard); }
+  .start-btn.hard-start:hover { background: #791F1F; }
 
   .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
   .stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
   .stat-val { font-size: 22px; font-weight: 700; color: var(--text); }
   .stat-lbl { font-size: 11px; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
 
+  .hard-indicator { display: none; text-align: center; margin-bottom: 0.75rem; }
+  .hard-indicator span { background: var(--hard); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 99px; }
+  .hard-indicator.visible { display: block; }
+
+  .lives-row { display: flex; gap: 6px; justify-content: center; margin-bottom: 0.75rem; font-size: 20px; }
+
   .progress-bar { height: 6px; background: var(--surface2); border-radius: 99px; margin-bottom: 0.75rem; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 99px; background: var(--green); transition: width 0.4s ease; }
+  .progress-fill.hard { background: var(--hard); }
   .timer-bar { height: 4px; border-radius: 99px; margin-bottom: 1rem; transition: width 0.9s linear, background 0.3s; }
 
   .category-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
   .cat-math { background: var(--blue-light); color: var(--blue-text); }
   .cat-reading { background: var(--purple-light); color: var(--purple-text); }
   .cat-writing { background: var(--amber-light); color: var(--amber-text); }
-  .cat-science { background: var(--green-light); color: var(--green-text); }
   .cat-fun { background: var(--amber-light); color: var(--amber-text); }
+  .cat-math-hard, .cat-reading-hard, .cat-writing-hard, .cat-fun-hard { background: var(--hard-light); color: var(--hard-text); }
 
   .question-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .question-card.hard-border { border-color: rgba(163,45,45,0.35); }
   .question-text { font-size: 16px; color: var(--text); line-height: 1.65; margin-bottom: 1rem; font-weight: 500; }
 
   .options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .opt-btn {
-    background: var(--surface2);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 14px;
-    font-size: 14px;
-    color: var(--text);
-    cursor: pointer;
-    text-align: left;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
-    line-height: 1.4;
-    font-family: inherit;
-  }
+  .opt-btn { background: var(--surface2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px 14px; font-size: 14px; color: var(--text); cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s, transform 0.1s; line-height: 1.4; font-family: inherit; }
   .opt-btn:hover:not(:disabled) { border-color: var(--border2); background: var(--surface); transform: translateY(-1px); }
   .opt-btn:active:not(:disabled) { transform: scale(0.98); }
   .opt-btn.correct { background: var(--green-light); border-color: var(--green); color: var(--green-text); font-weight: 600; }
   .opt-btn.wrong { background: var(--red-light); border-color: var(--red); color: var(--red-text); }
+  .opt-btn.shake { animation: shake 0.35s; }
   .opt-btn:disabled { cursor: default; }
+
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
 
   .feedback-box { border-radius: var(--radius); padding: 12px 14px; font-size: 14px; margin-bottom: 1rem; line-height: 1.55; }
   .feedback-correct { background: var(--green-light); color: var(--green-text); }
   .feedback-wrong { background: var(--red-light); color: var(--red-text); }
 
-  .next-btn {
-    width: 100%; padding: 13px;
-    border-radius: var(--radius);
-    border: 0.5px solid var(--border2);
-    background: transparent;
-    color: var(--text);
-    font-size: 15px;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: 500;
-    transition: background 0.15s;
-  }
+  .next-btn { width: 100%; padding: 13px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: transparent; color: var(--text); font-size: 15px; cursor: pointer; font-family: inherit; font-weight: 500; transition: background 0.15s; }
   .next-btn:hover { background: var(--surface2); }
-
-  .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.5rem 0; }
-  .mode-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1rem;
-    cursor: pointer;
-    text-align: center;
-    transition: border-color 0.15s, transform 0.1s;
-  }
-  .mode-card:hover { transform: translateY(-2px); }
-  .mode-card.selected { border: 2px solid var(--green); }
-  .mode-icon { font-size: 26px; margin-bottom: 6px; }
-  .mode-title { font-size: 14px; font-weight: 600; color: var(--text); }
-  .mode-desc { font-size: 12px; color: var(--text2); margin-top: 3px; }
-
-  .start-btn {
-    width: 100%; padding: 14px;
-    border-radius: var(--radius);
-    background: var(--green);
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.15s, transform 0.1s;
-    letter-spacing: -0.2px;
-  }
-  .start-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
-  .start-btn:active { transform: scale(0.99); }
 
   .result-icon { font-size: 56px; text-align: center; margin: 1rem 0 0.5rem; }
   .result-title { font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 4px; color: var(--text); letter-spacing: -0.5px; }
   .result-sub { font-size: 14px; text-align: center; color: var(--text2); margin-bottom: 1.5rem; line-height: 1.5; }
-  .replay-btn {
-    width: 100%; padding: 13px;
-    border-radius: var(--radius);
-    background: transparent;
-    border: 0.5px solid var(--border2);
-    color: var(--text);
-    font-size: 15px;
-    cursor: pointer;
-    margin-bottom: 8px;
-    font-family: inherit;
-    font-weight: 500;
-    transition: background 0.15s;
-  }
+  .replay-btn { width: 100%; padding: 13px; border-radius: var(--radius); background: transparent; border: 0.5px solid var(--border2); color: var(--text); font-size: 15px; cursor: pointer; margin-bottom: 8px; font-family: inherit; font-weight: 500; transition: background 0.15s; }
   .replay-btn:hover { background: var(--surface2); }
-
-  .logo { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
-  .logo-badge { background: var(--green); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; }
 </style>
 </head>
 <body>
 <div id="app">
 
-  <!-- START SCREEN -->
+  <!-- START -->
   <div id="screen-start" class="screen active">
     <div class="logo">
       <span class="logo-badge">GRADE 6</span>
-      <span style="font-size:13px; color:var(--text2); font-weight:500;">Ontario EQAO Practice</span>
+      <span style="font-size:13px;color:var(--text2);font-weight:500;">Ontario EQAO Practice</span>
     </div>
     <div class="header">
       <h1>Quiz Blitz 🎯</h1>
-      <p>EQAO-style questions + fun trivia — earn points, build streaks!</p>
+      <p>Pick a difficulty, choose your mode, and go!</p>
     </div>
-    <div class="start-grid">
-      <div class="mode-card selected" onclick="selectMode(this,'eqao')">
-        <div class="mode-icon">📐</div>
-        <div class="mode-title">EQAO Mix</div>
-        <div class="mode-desc">Math, reading & writing</div>
-      </div>
-      <div class="mode-card" onclick="selectMode(this,'fun')">
-        <div class="mode-icon">🌟</div>
-        <div class="mode-title">Fun Facts</div>
-        <div class="mode-desc">Science, animals & more</div>
-      </div>
-      <div class="mode-card" onclick="selectMode(this,'math')">
-        <div class="mode-icon">🔢</div>
-        <div class="mode-title">Math Only</div>
-        <div class="mode-desc">Numbers & problem solving</div>
-      </div>
-      <div class="mode-card" onclick="selectMode(this,'all')">
-        <div class="mode-icon">🎯</div>
-        <div class="mode-title">Everything!</div>
-        <div class="mode-desc">All categories mixed</div>
-      </div>
+
+    <div class="diff-tabs">
+      <button class="diff-tab active" id="tab-normal" onclick="switchDiff('normal')">⭐ Normal</button>
+      <button class="diff-tab hard-tab" id="tab-hard" onclick="switchDiff('hard')">💀 Hard Mode</button>
     </div>
-    <button class="start-btn" onclick="startGame()">Start Quiz →</button>
+
+    <!-- Normal modes -->
+    <div id="normal-modes">
+      <div class="start-grid">
+        <div class="mode-card selected" onclick="selectMode(this,'eqao')">
+          <div class="mode-icon">📐</div>
+          <div class="mode-title">EQAO Mix</div>
+          <div class="mode-desc">Math, reading & writing</div>
+        </div>
+        <div class="mode-card" onclick="selectMode(this,'fun')">
+          <div class="mode-icon">🌟</div>
+          <div class="mode-title">Fun Facts</div>
+          <div class="mode-desc">Science, animals & more</div>
+        </div>
+        <div class="mode-card" onclick="selectMode(this,'math')">
+          <div class="mode-icon">🔢</div>
+          <div class="mode-title">Math Only</div>
+          <div class="mode-desc">Numbers & problem solving</div>
+        </div>
+        <div class="mode-card" onclick="selectMode(this,'all')">
+          <div class="mode-icon">🎯</div>
+          <div class="mode-title">Everything!</div>
+          <div class="mode-desc">All categories mixed</div>
+        </div>
+      </div>
+      <button class="start-btn" onclick="startGame()">Start Quiz →</button>
+    </div>
+
+    <!-- Hard modes -->
+    <div id="hard-modes" style="display:none;">
+      <div class="hard-info">💀 <strong>Hard Mode rules:</strong> Only 10 seconds per question · Tougher questions · No answer shown when wrong · 3 lives only — lose them all and it's game over!</div>
+      <div class="start-grid">
+        <div class="mode-card hard-card selected" onclick="selectMode(this,'eqao-hard')">
+          <div class="hard-pip">HARD</div>
+          <div class="mode-icon">📐</div>
+          <div class="mode-title">EQAO Hard</div>
+          <div class="mode-desc">Tricky math & literacy</div>
+        </div>
+        <div class="mode-card hard-card" onclick="selectMode(this,'fun-hard')">
+          <div class="hard-pip">HARD</div>
+          <div class="mode-icon">🌟</div>
+          <div class="mode-title">Fun Facts Hard</div>
+          <div class="mode-desc">Tougher trivia</div>
+        </div>
+        <div class="mode-card hard-card" onclick="selectMode(this,'math-hard')">
+          <div class="hard-pip">HARD</div>
+          <div class="mode-icon">🔢</div>
+          <div class="mode-title">Math Hard</div>
+          <div class="mode-desc">Multi-step problems</div>
+        </div>
+        <div class="mode-card hard-card" onclick="selectMode(this,'all-hard')">
+          <div class="hard-pip">HARD</div>
+          <div class="mode-icon">💥</div>
+          <div class="mode-title">Ultimate!</div>
+          <div class="mode-desc">Everything, hard difficulty</div>
+        </div>
+      </div>
+      <button class="start-btn hard-start" onclick="startGame()">Start Hard Mode 💀</button>
+    </div>
   </div>
 
-  <!-- QUIZ SCREEN -->
+  <!-- QUIZ -->
   <div id="screen-quiz" class="screen">
+    <div class="hard-indicator" id="hard-indicator"><span>💀 HARD MODE — 3 LIVES</span></div>
     <div class="stats-row">
       <div class="stat-card"><div class="stat-val" id="score-val">0</div><div class="stat-lbl">Score</div></div>
       <div class="stat-card"><div class="stat-val" id="qnum-val">1/10</div><div class="stat-lbl">Question</div></div>
       <div class="stat-card"><div class="stat-val" id="streak-val">0🔥</div><div class="stat-lbl">Streak</div></div>
     </div>
+    <div class="lives-row" id="lives-row" style="display:none;"></div>
     <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-    <div class="timer-bar" id="timer-bar" style="width:100%; background:var(--green);"></div>
-    <div class="question-card">
+    <div class="timer-bar" id="timer-bar" style="width:100%;"></div>
+    <div class="question-card" id="question-card">
       <span class="category-badge" id="cat-badge">Math</span>
       <div class="question-text" id="question-text"></div>
       <div class="options" id="options-grid"></div>
@@ -245,7 +218,7 @@
     <button class="next-btn" id="next-btn" style="display:none" onclick="nextQuestion()">Next question →</button>
   </div>
 
-  <!-- RESULT SCREEN -->
+  <!-- RESULT -->
   <div id="screen-result" class="screen">
     <div class="result-icon" id="result-icon">🏆</div>
     <div class="result-title" id="result-title">Excellent!</div>
@@ -260,177 +233,221 @@
   </div>
 
 </div>
-
 <script>
-const ALL_QUESTIONS = [
-  { cat:'math', catLabel:'Math', q:'A store sells apples for $0.35 each. If Maya buys 12 apples, how much does she pay?', opts:['$3.80','$4.20','$3.50','$4.00'], ans:1, exp:'12 × $0.35 = $4.20' },
-  { cat:'math', catLabel:'Math', q:'What is the perimeter of a rectangle with length 8 cm and width 5 cm?', opts:['40 cm','26 cm','13 cm','20 cm'], ans:1, exp:'Perimeter = 2 × (8 + 5) = 2 × 13 = 26 cm' },
-  { cat:'math', catLabel:'Math', q:'Which fraction is equivalent to 3/4?', opts:['6/9','9/12','4/6','8/14'], ans:1, exp:'9/12 = 3/4 because 9÷3 = 3 and 12÷3 = 4' },
-  { cat:'math', catLabel:'Math', q:'A bag has 6 red, 4 blue, and 2 green marbles. What is the probability of picking a red marble?', opts:['1/2','1/3','3/6','1/4'], ans:0, exp:'6 out of 12 total = 6/12 = 1/2' },
-  { cat:'math', catLabel:'Math', q:'What is 25% of 80?', opts:['25','20','15','30'], ans:1, exp:'25% = 1/4, and 80 ÷ 4 = 20' },
-  { cat:'math', catLabel:'Math', q:'A pattern goes: 3, 6, 12, 24, ... What is the next number?', opts:['36','42','48','28'], ans:2, exp:'Each number is multiplied by 2. 24 × 2 = 48' },
-  { cat:'math', catLabel:'Math', q:'What is the area of a triangle with base 10 cm and height 6 cm?', opts:['60 cm²','30 cm²','16 cm²','20 cm²'], ans:1, exp:'Area = (base × height) ÷ 2 = (10 × 6) ÷ 2 = 30 cm²' },
-  { cat:'math', catLabel:'Math', q:'Which number is between 3.4 and 3.5?', opts:['3.52','3.38','3.47','3.60'], ans:2, exp:'3.47 falls between 3.40 and 3.50' },
-  { cat:'math', catLabel:'Math', q:'Liam has $20. He buys a book for $7.45 and a snack for $2.30. How much does he have left?', opts:['$9.75','$10.25','$11.25','$10.75'], ans:1, exp:'$20.00 − $7.45 − $2.30 = $10.25' },
-  { cat:'math', catLabel:'Math', q:'What is 2³ (2 to the power of 3)?', opts:['6','8','9','12'], ans:1, exp:'2³ = 2 × 2 × 2 = 8' },
-  { cat:'reading', catLabel:'Reading', q:'In a story, the narrator says "the thunder growled like an angry giant." This is an example of:', opts:['A simile','A metaphor','Personification','Alliteration'], ans:2, exp:'Giving thunder a human-like action (growling angrily) is personification.' },
-  { cat:'reading', catLabel:'Reading', q:'Which sentence is the BEST main idea for a paragraph about recycling?', opts:['Blue bins are placed on the curb.','Recycling helps protect the environment.','Paper and plastic can both be recycled.','Our school started a recycling club.'], ans:1, exp:'A main idea should cover the whole topic broadly — recycling helping the environment fits best.' },
-  { cat:'reading', catLabel:'Reading', q:'The word "benevolent" most likely means:', opts:['angry','powerful','kind and generous','careful'], ans:2, exp:'"Benevolent" comes from Latin meaning "good will" — it means kind and generous.' },
-  { cat:'reading', catLabel:'Reading', q:'Which text feature would BEST help a reader find information about photosynthesis in a science textbook?', opts:['Table of contents','Glossary','Index','Caption'], ans:2, exp:'An index helps you find specific topics quickly by page number.' },
-  { cat:'reading', catLabel:'Reading', q:'A story\'s "climax" is:', opts:['The introduction of characters','The most exciting turning point','The lesson learned','The setting of the story'], ans:1, exp:'The climax is the highest point of tension or the turning point in a story.' },
-  { cat:'writing', catLabel:'Writing', q:'Which sentence uses correct punctuation?', opts:["Let's go to the park, it's sunny outside.","Let's go to the park. It's sunny outside.","Lets go to the park its sunny outside.","Let's go to the park it's sunny outside."], ans:1, exp:'Two complete sentences need a period between them, not a comma (comma splice).' },
-  { cat:'writing', catLabel:'Writing', q:'Which transition word BEST shows a contrast between two ideas?', opts:['Furthermore','Therefore','However','Additionally'], ans:2, exp:'"However" is used to introduce a contrasting or opposing idea.' },
-  { cat:'writing', catLabel:'Writing', q:'Which is an example of a topic sentence?', opts:['"He walked quickly."','"Dogs make great pets for many reasons."','"For example, dogs are loyal."','"In conclusion, dogs are wonderful."'], ans:1, exp:'A topic sentence introduces the main idea of a paragraph.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'Which planet is known as the Red Planet?', opts:['Venus','Mars','Jupiter','Saturn'], ans:1, exp:'Mars gets its reddish colour from iron oxide (rust) on its surface.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'How many bones does an adult human body have?', opts:['206','198','250','215'], ans:0, exp:'Adults have 206 bones. Babies are born with around 270 and some fuse together as we grow.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'What gas do plants absorb from the air during photosynthesis?', opts:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'], ans:2, exp:'Plants take in CO₂ and release oxygen during photosynthesis.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'Which animal has the largest brain compared to its body size?', opts:['Dolphin','Elephant','Humans','Chimpanzee'], ans:0, exp:'Dolphins have the largest brain-to-body ratio of any animal besides humans.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'What is the capital city of Canada?', opts:['Toronto','Vancouver','Ottawa','Montreal'], ans:2, exp:'Ottawa, in Ontario, has been Canada\'s capital since 1857.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'The Great Wall of China was built to protect against invasions. Approximately how long is it?', opts:['1,000 km','5,000 km','21,000 km','500 km'], ans:2, exp:'The Great Wall stretches over 21,000 km when all sections are counted!' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'Which layer of the Earth is the thickest?', opts:['Crust','Mantle','Outer core','Inner core'], ans:1, exp:'The mantle is about 2,900 km thick — by far the thickest layer of Earth.' },
-  { cat:'fun', catLabel:'Fun Fact!', q:'What is the fastest land animal?', opts:['Lion','Ostrich','Cheetah','Greyhound'], ans:2, exp:'Cheetahs can reach up to 120 km/h in short bursts.' },
+const NORMAL_Q = [
+  {cat:'math',catLabel:'Math',q:'A store sells apples for $0.35 each. If Maya buys 12 apples, how much does she pay?',opts:['$3.80','$4.20','$3.50','$4.00'],ans:1,exp:'12 × $0.35 = $4.20'},
+  {cat:'math',catLabel:'Math',q:'What is the perimeter of a rectangle with length 8 cm and width 5 cm?',opts:['40 cm','26 cm','13 cm','20 cm'],ans:1,exp:'Perimeter = 2 × (8 + 5) = 26 cm'},
+  {cat:'math',catLabel:'Math',q:'Which fraction is equivalent to 3/4?',opts:['6/9','9/12','4/6','8/14'],ans:1,exp:'9/12 = 3/4 because 9÷3=3 and 12÷3=4'},
+  {cat:'math',catLabel:'Math',q:'A bag has 6 red, 4 blue, and 2 green marbles. Probability of picking red?',opts:['1/2','1/3','3/6','1/4'],ans:0,exp:'6 out of 12 total = 6/12 = 1/2'},
+  {cat:'math',catLabel:'Math',q:'What is 25% of 80?',opts:['25','20','15','30'],ans:1,exp:'25% = 1/4, and 80 ÷ 4 = 20'},
+  {cat:'math',catLabel:'Math',q:'Pattern: 3, 6, 12, 24, ... What comes next?',opts:['36','42','48','28'],ans:2,exp:'Each number × 2. 24 × 2 = 48'},
+  {cat:'math',catLabel:'Math',q:'Area of a triangle with base 10 cm and height 6 cm?',opts:['60 cm²','30 cm²','16 cm²','20 cm²'],ans:1,exp:'Area = (base × height) ÷ 2 = 30 cm²'},
+  {cat:'math',catLabel:'Math',q:'Which number is between 3.4 and 3.5?',opts:['3.52','3.38','3.47','3.60'],ans:2,exp:'3.47 falls between 3.40 and 3.50'},
+  {cat:'math',catLabel:'Math',q:'Liam has $20. Buys a book for $7.45 and snack for $2.30. How much left?',opts:['$9.75','$10.25','$11.25','$10.75'],ans:1,exp:'$20.00 − $7.45 − $2.30 = $10.25'},
+  {cat:'math',catLabel:'Math',q:'What is 2³ (2 to the power of 3)?',opts:['6','8','9','12'],ans:1,exp:'2³ = 2 × 2 × 2 = 8'},
+  {cat:'reading',catLabel:'Reading',q:'"The thunder growled like an angry giant." This is an example of:',opts:['A simile','A metaphor','Personification','Alliteration'],ans:2,exp:'Giving thunder a human action (growling) = personification.'},
+  {cat:'reading',catLabel:'Reading',q:'Best main idea for a paragraph about recycling?',opts:['Blue bins are placed on the curb.','Recycling helps protect the environment.','Paper and plastic can both be recycled.','Our school started a recycling club.'],ans:1,exp:'A main idea covers the whole topic broadly.'},
+  {cat:'reading',catLabel:'Reading',q:'The word "benevolent" most likely means:',opts:['angry','powerful','kind and generous','careful'],ans:2,exp:'"Benevolent" means kind and generous.'},
+  {cat:'reading',catLabel:'Reading',q:'Best text feature to find "photosynthesis" in a textbook?',opts:['Table of contents','Glossary','Index','Caption'],ans:2,exp:'An index lists specific topics with page numbers.'},
+  {cat:'reading',catLabel:'Reading',q:'A story\'s "climax" is:',opts:['Introduction of characters','The most exciting turning point','The lesson learned','The setting'],ans:1,exp:'The climax is the highest point of tension.'},
+  {cat:'writing',catLabel:'Writing',q:'Which sentence uses correct punctuation?',opts:["Let's go to the park, it's sunny.","Let's go to the park. It's sunny.","Lets go to the park its sunny.","Let's go to the park it's sunny."],ans:1,exp:'Two complete sentences need a period, not a comma.'},
+  {cat:'writing',catLabel:'Writing',q:'Which transition word shows CONTRAST?',opts:['Furthermore','Therefore','However','Additionally'],ans:2,exp:'"However" introduces a contrasting idea.'},
+  {cat:'writing',catLabel:'Writing',q:'Which is a topic sentence?',opts:['"He walked quickly."','"Dogs make great pets for many reasons."','"For example, dogs are loyal."','"In conclusion, dogs are wonderful."'],ans:1,exp:'A topic sentence introduces the main idea of a paragraph.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'Which planet is known as the Red Planet?',opts:['Venus','Mars','Jupiter','Saturn'],ans:1,exp:'Mars gets its red colour from iron oxide (rust) on its surface.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'How many bones does an adult human body have?',opts:['206','198','250','215'],ans:0,exp:'Adults have 206 bones — babies start with about 270.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'What gas do plants absorb during photosynthesis?',opts:['Oxygen','Nitrogen','Carbon dioxide','Hydrogen'],ans:2,exp:'Plants take in CO₂ and release oxygen.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'What is the capital city of Canada?',opts:['Toronto','Vancouver','Ottawa','Montreal'],ans:2,exp:'Ottawa has been Canada\'s capital since 1857.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'Approximately how long is the Great Wall of China?',opts:['1,000 km','5,000 km','21,000 km','500 km'],ans:2,exp:'The Great Wall stretches over 21,000 km total!'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'Which layer of the Earth is the thickest?',opts:['Crust','Mantle','Outer core','Inner core'],ans:1,exp:'The mantle is about 2,900 km thick.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'What is the fastest land animal?',opts:['Lion','Ostrich','Cheetah','Greyhound'],ans:2,exp:'Cheetahs can reach up to 120 km/h in short bursts.'},
+  {cat:'fun',catLabel:'Fun Fact!',q:'Which animal has the largest brain relative to body size (besides humans)?',opts:['Dolphin','Elephant','Gorilla','Chimpanzee'],ans:0,exp:'Dolphins have the largest brain-to-body ratio after humans.'},
 ];
 
-let selectedMode = 'eqao';
-let questions = [];
-let current = 0, score = 0, streak = 0, bestStreak = 0, correct = 0;
-let timerInterval = null, timeLeft = 20, answered = false;
+const HARD_Q = [
+  {cat:'math-hard',catLabel:'Math 💀',q:'Sarah earns $12.50/hour. She works 6 hours Saturday and 4.5 hours Sunday. Total earnings?',opts:['$118.75','$131.25','$125.00','$106.25'],ans:1,exp:'(6 + 4.5) × $12.50 = 10.5 × $12.50 = $131.25'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'A number divided by 6, then multiplied by 4, gives 32. What is the original number?',opts:['42','48','54','36'],ans:1,exp:'Work backwards: 32 ÷ 4 = 8; then 8 × 6 = 48'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'A triangle has angles in the ratio 2:3:4. What is the largest angle?',opts:['60°','80°','72°','90°'],ans:1,exp:'Angles sum to 180°. Parts = 9. Largest = (4/9) × 180° = 80°'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'What is the value of n in: 3n + 7 = 28?',opts:['5','6','7','9'],ans:2,exp:'3n = 28 − 7 = 21; n = 21 ÷ 3 = 7'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'Map scale is 1:50 000. Two cities are 4.6 cm apart on the map. Real distance?',opts:['23 km','46 km','2.3 km','4.6 km'],ans:0,exp:'4.6 cm × 50 000 = 230 000 cm = 2 300 m = 23 km'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'Ava eats 3/8 of a pizza, Ben eats 1/4. What fraction is left for Cara?',opts:['3/8','1/4','1/2','5/8'],ans:0,exp:'3/8 + 2/8 = 5/8 eaten. Remaining = 8/8 − 5/8 = 3/8'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'Volume of a box is 360 cm³. Length = 10 cm, width = 6 cm. What is the height?',opts:['4 cm','5 cm','6 cm','7 cm'],ans:2,exp:'360 = 10 × 6 × h → h = 360 ÷ 60 = 6 cm'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'A store marks up a $65 jacket by 40%. What is the selling price?',opts:['$79.00','$91.00','$85.50','$95.00'],ans:1,exp:'40% of $65 = $26. Selling price = $65 + $26 = $91'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'Which set is ordered from least to greatest?',opts:['0.6, 3/5, 62%, 0.63','3/5, 0.6, 62%, 0.63','0.6, 3/5, 0.63, 62%','3/5, 62%, 0.6, 0.63'],ans:0,exp:'3/5 = 0.60, 62% = 0.62. Correct order: 0.60, 0.60, 0.62, 0.63'},
+  {cat:'math-hard',catLabel:'Math 💀',q:'A swimming pool holds 45 000 L. A pump drains 750 L per minute. How long to empty it (in hours)?',opts:['1 hour','60 minutes','1.5 hours','2 hours'],ans:0,exp:'45 000 ÷ 750 = 60 minutes = 1 hour'},
+  {cat:'reading-hard',catLabel:'Reading 💀',q:'"The old house exhaled dust as we opened the door." The word "exhaled" is used to:',opts:['Suggest the house was dangerous','Make the house seem alive and human','Show the house was very old','Indicate it was a windy day'],ans:1,exp:'Giving the house the human action of breathing = personification.'},
+  {cat:'reading-hard',catLabel:'Reading 💀',q:'"Maya glanced at the clock three times during the speech." Best inference?',opts:['Maya disliked the speaker.','Maya was bored.','Maya may have been nervous about time or had somewhere to be.','Maya had forgotten her watch.'],ans:2,exp:'Repeatedly checking the clock suggests anxiety about time or having somewhere else to be.'},
+  {cat:'reading-hard',catLabel:'Reading 💀',q:'An author\'s "point of view" in non-fiction refers to:',opts:['Where a character stands in the story','The author\'s opinion or perspective on the topic','The type of narrator used','The time period of the writing'],ans:1,exp:'In non-fiction, point of view = the author\'s stance or perspective on the subject.'},
+  {cat:'reading-hard',catLabel:'Reading 💀',q:'Which sentence uses an ALLUSION?',opts:['He ran as fast as a cheetah.','She was a real Einstein when it came to math.','The wind whispered through the trees.','The bag was as heavy as a rock.'],ans:1,exp:'An allusion references a well-known person — "a real Einstein" alludes to Albert Einstein.'},
+  {cat:'reading-hard',catLabel:'Reading 💀',q:'In an argument, a "counter-argument" is:',opts:['A supporting detail for the main claim','An opposing view the author then addresses','A factual statistic used as evidence','The conclusion of the argument'],ans:1,exp:'A counter-argument presents the opposing side, which the author then refutes.'},
+  {cat:'writing-hard',catLabel:'Writing 💀',q:'Which sentence is in PASSIVE voice?',opts:['The students completed the project.','The project was completed by the students.','The students worked hard on the project.','The teacher assigned the project.'],ans:1,exp:'Passive voice: the subject receives the action. "The project was completed BY the students."'},
+  {cat:'writing-hard',catLabel:'Writing 💀',q:'Which sentence has a MISPLACED modifier?',opts:['Running down the street, the dog chased the boy.','The girl with red hair sang beautifully.','The boy ate a sandwich for lunch.','She quickly finished her homework.'],ans:0,exp:'"Running down the street" seems to describe the dog, not the boy — that\'s a misplaced modifier.'},
+  {cat:'writing-hard',catLabel:'Writing 💀',q:'Which is an example of PARALLEL STRUCTURE?',opts:['She likes to swim, running, and to hike.','She likes swimming, running, and hiking.','She likes to swim, to run, and hiking.','She likes swim, run, and hiking.'],ans:1,exp:'Parallel structure uses the same grammatical form: swimming, running, hiking (all -ing).'},
+  {cat:'writing-hard',catLabel:'Writing 💀',q:'Which sentence uses a semicolon CORRECTLY?',opts:['I love to read; books are great.','She went to the store; and bought milk.','He was tired; but he finished his work.','She was happy; smiled all day.'],ans:0,exp:'A semicolon joins two complete independent clauses without a conjunction.'},
+  {cat:'writing-hard',catLabel:'Writing 💀',q:'Which word is an example of onomatopoeia?',opts:['Beautiful','Sizzle','Quickly','Enormous'],ans:1,exp:'"Sizzle" sounds like what it describes — that\'s onomatopoeia.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'What is the only country that is also a continent?',opts:['Greenland','Antarctica','Australia','Iceland'],ans:2,exp:'Australia is both a country and a continent — the only one in the world.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'How many hearts does an octopus have?',opts:['1','2','3','4'],ans:2,exp:'An octopus has 3 hearts: one for the body, two for the gills.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'Which element has the chemical symbol "Fe"?',opts:['Fluorine','Iron','Francium','Fermium'],ans:1,exp:'"Fe" comes from the Latin word "ferrum," meaning iron.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'Which Canadian territory/province is the largest by area?',opts:['Ontario','British Columbia','Quebec','Nunavut'],ans:3,exp:'Nunavut is Canada\'s largest territory, covering over 2 million km².'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'Light from the Sun takes approximately how long to reach Earth?',opts:['8 seconds','8 minutes','80 minutes','8 hours'],ans:1,exp:'Light travels at 300,000 km/s and takes about 8 minutes 20 seconds.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'What is the hardest natural substance on Earth?',opts:['Quartz','Titanium','Diamond','Graphite'],ans:2,exp:'Diamond scores 10 on the Mohs hardness scale — the maximum.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'Which part of the brain controls balance and coordination?',opts:['Cerebrum','Medulla','Cerebellum','Hippocampus'],ans:2,exp:'The cerebellum (Latin: "little brain") coordinates movement and balance.'},
+  {cat:'fun-hard',catLabel:'Fun Facts 💀',q:'How many sides does a dodecagon have?',opts:['10','11','12','14'],ans:2,exp:'"Dodeca" is Greek for twelve — a dodecagon has 12 sides.'},
+];
 
-function selectMode(el, mode) {
-  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+let selectedMode='eqao', currentDiff='normal';
+let questions=[], current=0, score=0, streak=0, bestStreak=0, correct=0;
+let timerInterval=null, timeLeft=20, answered=false;
+let isHard=false, lives=3, maxTime=20;
+
+function switchDiff(diff){
+  currentDiff=diff;
+  document.getElementById('tab-normal').classList.toggle('active',diff==='normal');
+  document.getElementById('tab-hard').classList.toggle('active',diff==='hard');
+  document.getElementById('normal-modes').style.display=diff==='normal'?'':'none';
+  document.getElementById('hard-modes').style.display=diff==='hard'?'':'none';
+  if(diff==='normal'){selectedMode='eqao';document.querySelectorAll('#normal-modes .mode-card').forEach((c,i)=>c.classList.toggle('selected',i===0));}
+  else{selectedMode='eqao-hard';document.querySelectorAll('#hard-modes .mode-card').forEach((c,i)=>c.classList.toggle('selected',i===0));}
+}
+
+function selectMode(el,mode){
+  const cont=currentDiff==='normal'?'#normal-modes':'#hard-modes';
+  document.querySelectorAll(cont+' .mode-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  selectedMode = mode;
+  selectedMode=mode;
 }
 
-function shuffle(arr) {
-  let a = [...arr];
-  for (let i = a.length-1; i > 0; i--) { let j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
-  return a;
+function shuffle(arr){let a=[...arr];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function getQuestions(mode){
+  let pool=[];
+  if(mode==='eqao') pool=NORMAL_Q.filter(q=>['math','reading','writing'].includes(q.cat));
+  else if(mode==='fun') pool=NORMAL_Q.filter(q=>q.cat==='fun');
+  else if(mode==='math') pool=NORMAL_Q.filter(q=>q.cat==='math');
+  else if(mode==='all') pool=NORMAL_Q;
+  else if(mode==='eqao-hard') pool=HARD_Q.filter(q=>['math-hard','reading-hard','writing-hard'].includes(q.cat));
+  else if(mode==='fun-hard') pool=HARD_Q.filter(q=>q.cat==='fun-hard');
+  else if(mode==='math-hard') pool=HARD_Q.filter(q=>q.cat==='math-hard');
+  else if(mode==='all-hard') pool=HARD_Q;
+  return shuffle(pool).slice(0,10);
 }
 
-function getQuestions(mode) {
-  let pool = [];
-  if (mode === 'eqao') pool = ALL_QUESTIONS.filter(q => ['math','reading','writing'].includes(q.cat));
-  else if (mode === 'fun') pool = ALL_QUESTIONS.filter(q => q.cat === 'fun');
-  else if (mode === 'math') pool = ALL_QUESTIONS.filter(q => q.cat === 'math');
-  else pool = ALL_QUESTIONS;
-  return shuffle(pool).slice(0, 10);
-}
-
-function startGame() {
-  questions = getQuestions(selectedMode);
-  current = 0; score = 0; streak = 0; bestStreak = 0; correct = 0;
+function startGame(){
+  isHard=selectedMode.includes('hard');
+  maxTime=isHard?10:20;
+  lives=3;
+  questions=getQuestions(selectedMode);
+  current=0;score=0;streak=0;bestStreak=0;correct=0;
   showScreen('quiz');
+  document.getElementById('hard-indicator').classList.toggle('visible',isHard);
+  document.getElementById('progress-fill').classList.toggle('hard',isHard);
+  const lr=document.getElementById('lives-row');
+  if(isHard){lr.style.display='flex';renderLives();}else lr.style.display='none';
   renderQuestion();
 }
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+function renderLives(){
+  const row=document.getElementById('lives-row');
+  row.innerHTML='';
+  for(let i=0;i<3;i++){const s=document.createElement('span');s.textContent=i<lives?'❤️':'🖤';row.appendChild(s);}
 }
 
-function renderQuestion() {
-  answered = false;
-  clearInterval(timerInterval);
-  timeLeft = 20;
-  const q = questions[current];
-  const total = questions.length;
-  document.getElementById('qnum-val').textContent = (current+1) + '/' + total;
-  document.getElementById('score-val').textContent = score;
-  document.getElementById('streak-val').textContent = streak + '🔥';
-  document.getElementById('progress-fill').style.width = (current / total * 100) + '%';
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');}
 
-  const badge = document.getElementById('cat-badge');
-  badge.textContent = q.catLabel;
-  badge.className = 'category-badge cat-' + q.cat;
-  document.getElementById('question-text').textContent = q.q;
-
-  const grid = document.getElementById('options-grid');
-  grid.innerHTML = '';
-  q.opts.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn';
-    btn.textContent = opt;
-    btn.onclick = () => handleAnswer(i);
-    grid.appendChild(btn);
+function renderQuestion(){
+  answered=false;clearInterval(timerInterval);timeLeft=maxTime;
+  const q=questions[current];const total=questions.length;
+  document.getElementById('qnum-val').textContent=(current+1)+'/'+total;
+  document.getElementById('score-val').textContent=score;
+  document.getElementById('streak-val').textContent=streak+'🔥';
+  document.getElementById('progress-fill').style.width=(current/total*100)+'%';
+  const badge=document.getElementById('cat-badge');
+  badge.textContent=q.catLabel;badge.className='category-badge cat-'+q.cat;
+  document.getElementById('question-card').classList.toggle('hard-border',isHard);
+  document.getElementById('question-text').textContent=q.q;
+  const grid=document.getElementById('options-grid');grid.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');btn.className='opt-btn';btn.textContent=opt;
+    btn.onclick=()=>handleAnswer(i);grid.appendChild(btn);
   });
-
-  document.getElementById('feedback-box').style.display = 'none';
-  document.getElementById('next-btn').style.display = 'none';
-
-  const tb = document.getElementById('timer-bar');
-  tb.style.transition = 'none';
-  tb.style.width = '100%';
-  tb.style.background = 'var(--green)';
-  setTimeout(() => { tb.style.transition = 'width 0.9s linear, background 0.3s'; }, 50);
-
-  timerInterval = setInterval(() => {
+  document.getElementById('feedback-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  const tb=document.getElementById('timer-bar');
+  tb.style.transition='none';tb.style.width='100%';tb.style.background='var(--green)';
+  setTimeout(()=>{tb.style.transition='width 0.9s linear, background 0.3s';},50);
+  timerInterval=setInterval(()=>{
     timeLeft--;
-    const pct = (timeLeft / 20 * 100);
-    tb.style.width = pct + '%';
-    if (timeLeft <= 5) tb.style.background = 'var(--red)';
-    else if (timeLeft <= 10) tb.style.background = 'var(--amber)';
-    else tb.style.background = 'var(--green)';
-    if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) handleAnswer(-1); }
-  }, 1000);
+    const pct=(timeLeft/maxTime*100);tb.style.width=pct+'%';
+    const t1=isHard?3:5,t2=isHard?6:10;
+    if(timeLeft<=t1)tb.style.background='var(--red)';
+    else if(timeLeft<=t2)tb.style.background='var(--amber)';
+    else tb.style.background='var(--green)';
+    if(timeLeft<=0){clearInterval(timerInterval);if(!answered)handleAnswer(-1);}
+  },1000);
 }
 
-function handleAnswer(chosen) {
-  if (answered) return;
-  answered = true;
-  clearInterval(timerInterval);
-  const q = questions[current];
-  const btns = document.querySelectorAll('.opt-btn');
-  btns.forEach(b => b.disabled = true);
-  const fb = document.getElementById('feedback-box');
+function handleAnswer(chosen){
+  if(answered)return;answered=true;clearInterval(timerInterval);
+  const q=questions[current];
+  const btns=document.querySelectorAll('.opt-btn');btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('feedback-box');
+  const nb=document.getElementById('next-btn');
 
-  if (chosen === q.ans) {
+  if(chosen===q.ans){
     btns[chosen].classList.add('correct');
-    streak++; correct++;
-    bestStreak = Math.max(bestStreak, streak);
-    const pts = Math.max(100, 100 + (timeLeft * 10) + (streak > 1 ? (streak-1)*50 : 0));
-    score += pts;
-    fb.className = 'feedback-box feedback-correct';
-    fb.textContent = '✓ Correct! +' + pts + ' pts — ' + q.exp;
+    streak++;correct++;bestStreak=Math.max(bestStreak,streak);
+    const pts=Math.max(100,100+(timeLeft*(isHard?20:10))+(streak>1?(streak-1)*(isHard?100:50):0));
+    score+=pts;
+    fb.className='feedback-box feedback-correct';
+    fb.textContent='✓ Correct! +'+pts+' pts — '+q.exp;
   } else {
-    if (chosen >= 0) btns[chosen].classList.add('wrong');
-    btns[q.ans].classList.add('correct');
-    streak = 0;
-    fb.className = 'feedback-box feedback-wrong';
-    fb.textContent = (chosen === -1 ? '⏱ Time\'s up! ' : '✗ Not quite. ') + q.exp;
+    if(chosen>=0){btns[chosen].classList.add('wrong');btns[chosen].classList.add('shake');}
+    streak=0;
+    if(isHard){
+      lives--;renderLives();
+      fb.className='feedback-box feedback-wrong';
+      fb.textContent=(chosen===-1?'⏱ Time\'s up! ':'✗ Wrong! ')+(lives>0?lives+' life/lives remaining.':'No lives left — game over!');
+    } else {
+      btns[q.ans].classList.add('correct');
+      fb.className='feedback-box feedback-wrong';
+      fb.textContent=(chosen===-1?'⏱ Time\'s up! ':'✗ Not quite. ')+q.exp;
+    }
   }
 
-  fb.style.display = 'block';
-  document.getElementById('score-val').textContent = score;
-  document.getElementById('streak-val').textContent = streak + '🔥';
-  document.getElementById('next-btn').style.display = 'block';
-  document.getElementById('next-btn').textContent = (current + 1 < questions.length) ? 'Next question →' : 'See results →';
+  fb.style.display='block';
+  document.getElementById('score-val').textContent=score;
+  document.getElementById('streak-val').textContent=streak+'🔥';
+
+  if(isHard&&lives<=0){
+    nb.style.display='block';nb.textContent='Game over — see results →';
+    nb.onclick=showResults;
+  } else {
+    nb.style.display='block';
+    nb.textContent=(current+1<questions.length)?'Next question →':'See results →';
+    nb.onclick=nextQuestion;
+  }
 }
 
-function nextQuestion() {
-  current++;
-  if (current < questions.length) renderQuestion();
-  else showResults();
-}
+function nextQuestion(){current++;if(current<questions.length)renderQuestion();else showResults();}
 
-function showResults() {
-  document.getElementById('progress-fill').style.width = '100%';
-  const pct = Math.round(correct / questions.length * 100);
-  let icon = '🏆', title = 'Outstanding!', sub = 'You\'re an EQAO superstar!';
-  if (pct < 40) { icon = '📚'; title = 'Keep practising!'; sub = 'Review the questions and try again.'; }
-  else if (pct < 60) { icon = '🙂'; title = 'Good effort!'; sub = 'A bit more study and you\'ll ace it!'; }
-  else if (pct < 80) { icon = '👍'; title = 'Well done!'; sub = 'Solid work — keep it up!'; }
-  document.getElementById('result-icon').textContent = icon;
-  document.getElementById('result-title').textContent = title;
-  document.getElementById('result-sub').textContent = pct + '% correct — ' + sub;
-  document.getElementById('r-score').textContent = score;
-  document.getElementById('r-correct').textContent = correct + '/' + questions.length;
-  document.getElementById('r-streak').textContent = bestStreak;
+function showResults(){
+  const total=Math.min(current+1,questions.length);
+  const pct=Math.round(correct/total*100);
+  let icon='🏆',title='Outstanding!',sub=isHard?'You crushed Hard Mode! 💀':'You\'re an EQAO superstar!';
+  if(pct<40){icon='📚';title='Keep practising!';sub='Review the questions and try again.';}
+  else if(pct<60){icon='🙂';title='Good effort!';sub='A bit more study and you\'ll ace it!';}
+  else if(pct<80){icon='👍';title='Well done!';sub='Solid work — keep it up!';}
+  if(isHard&&lives<=0){icon='💀';title='Out of lives!';sub=correct+' correct before game over. Can you beat it?';}
+  document.getElementById('result-icon').textContent=icon;
+  document.getElementById('result-title').textContent=title;
+  document.getElementById('result-sub').textContent=pct+'% correct — '+sub;
+  document.getElementById('r-score').textContent=score;
+  document.getElementById('r-correct').textContent=correct+'/'+questions.length;
+  document.getElementById('r-streak').textContent=bestStreak;
   showScreen('result');
 }
 
-function restartSame() { startGame(); }
-function goHome() { showScreen('start'); }
+function restartSame(){startGame();}
+function goHome(){showScreen('start');}
 </script>
 </body>
 </html>
